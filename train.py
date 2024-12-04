@@ -28,12 +28,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Train a model.")
 
     # config file
-    parser.add_argument("--config", type=str, default='hw5_student_starter_code_win/configs/ddpm.yaml',
+    parser.add_argument("--config", type=str, default='configs/ddpm.yaml',
                         help="config file used to specify parameters")
 
     # data
     parser.add_argument("--data_dir", type=str,
-                        default='Data/', help="data folder")
+                        default='data/', help="data folder")
     parser.add_argument("--image_size", type=int,
                         default=128, help="image size")
     parser.add_argument("--batch_size", type=int,
@@ -50,7 +50,7 @@ def parse_args():
     # training
     parser.add_argument("--run_name", type=str, default=None, help="run_name")
     parser.add_argument("--output_dir", type=str,
-                        default="hw5_student_starter_code_win/experiments", help="output folder")
+                        default="experiments", help="output folder")
     parser.add_argument("--num_epochs", type=int, default=10)
     parser.add_argument("--learning_rate", type=float,
                         default=1e-4, help="learning rate")
@@ -135,6 +135,10 @@ def main():
 
     # parse arguments
     args = parse_args()
+
+    # Create necessary directories
+    os.makedirs(args.output_dir, exist_ok=True)
+    os.makedirs(os.path.join(args.output_dir, 'checkpoints'), exist_ok=True)
 
     # seed everything
     seed_everything(args.seed)
