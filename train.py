@@ -33,7 +33,7 @@ def parse_args():
 
     # data
     parser.add_argument("--data_dir", type=str,
-                        default='data/', help="data folder")
+                        default='Data', help="data folder")
     parser.add_argument("--image_size", type=int,
                         default=128, help="image size")
     parser.add_argument("--batch_size", type=int,
@@ -182,7 +182,8 @@ def main():
 
     # Note: data_dir = path to /Data folder
     train_dataset = datasets.ImageFolder(
-        root= args.data_dir + '/imagenet100_128x128/train' if not args.use_CIFAR else args.data_dir + 'CIFAR-10-images/train',
+        root=os.path.join(args.data_dir, 'imagenet100_128x128', 'train') if not args.use_CIFAR 
+        else os.path.join(args.data_dir, 'CIFAR-10-images', 'train'),
         transform=transform)
 
     # : setup dataloader
