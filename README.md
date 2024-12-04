@@ -1,87 +1,80 @@
-# IDL24Fall-HW5
+# Diffusion Models Implementation
 
-# Starter Code Usage
+## Setup
 
-**Training**
-
+1. Clone the repository:
+```bash
+git clone https://github.com/SamuelAmelaine/hw5alt.git
+cd hw5alt
 ```
+
+2. Create necessary directories:
+```bash
+mkdir -p Data/imagenet100_128x128
+mkdir -p pretrained
+mkdir -p experiments
+```
+
+3. Download the data:
+- Download imagenet100_128x128.tar.gz from: https://drive.google.com/drive/u/0/folders/1Hr8LU7HHPEad8ALmMo5cvisazsm6zE8Z
+- Extract it to the Data folder:
+```bash
+tar -xvf imagenet100_128x128.tar.gz -C Data/
+```
+
+4. Download pretrained VAE weights:
+- Download model.ckpt and place it in the pretrained folder
+
+5. Install requirements:
+```bash
+pip install torch torchvision torchaudio
+pip install tqdm pillow wandb ruamel.yaml torchmetrics
+```
+
+## Training
+
+Basic DDPM training:
+```bash
 python train.py --config configs/ddpm.yaml
 ```
 
-**Inference and Evaluating**
-
-```
-python inference.py inference.py
-```
-
-# 1. Download the data
-
-Please first download the data from here: https://drive.google.com/drive/u/0/folders/1Hr8LU7HHPEad8ALmMo5cvisazsm6zE8Z
-
-After download please unzip the data with
-
-```
-tar -xvf imagenet100_128x128.tar.gz
+With DDIM sampling:
+```bash
+python train.py --config configs/ddpm.yaml --use_ddim True
 ```
 
-# 2.Implementing DDPM from Scratch
-
-This homework will start from implementing DDPM from scratch.
-
-We provide the basic code structure for you and you will be implementing the following modules (by filling all TODOs)):
-
-```
-1. pipelines/ddpm.py
-2. schedulers/scheduling_ddpm.py
-3. train.py
-4. configs/ddpm.yaml
+With Latent DDPM:
+```bash
+python train.py --config configs/ddpm.yaml --latent_ddpm True
 ```
 
-A very basic U-Net architecture is provided to you, and you will need to improve the architecture for better performacne.
-
-# 3. Implementing DDIM
-
-Implement the DDIM from scratch:
-
-```
-1. schedulers/scheduling_ddpm.py
-2. create a config with ddim by setting use_ddim to True
+With Classifier-Free Guidance:
+```bash
+python train.py --config configs/ddpm.yaml --use_cfg True
 ```
 
-**NOTE: you need to set use_ddim to TRUE**
+## Inference & Evaluation
 
-# 4. Implementing Latent DDPM
-
-Implement the Latent DDPM.
-
-The pre-trained weights of VAE and basic modules are provided. 
-
-Download the pretrained weight here: and put it under a folder named 'pretrained' (create one if it doesn't exsit)
-
-You need to implement:
-
-```
-1. models/vae.py
-2. train.py with vae related stuff
-3. pipeline/ddpm.py with vae related stuff
+```bash
+python inference.py --ckpt path/to/checkpoint.pth
 ```
 
-**NOTE: you need to set use_vae to TRUE**
-
-# 5. Implementing CFG
-
-Implement CFG
-
+## Project Structure
 ```
-1. models/class_embedder.py
-2. train.py with cfg related stuff
-3. pipeline/ddpm.py with cfg related stuff
+.
+├── configs/
+│   └── ddpm.yaml          # Configuration file
+├── models/                # Model implementations
+├── pipelines/             # Generation pipelines
+├── schedulers/            # DDPM/DDIM schedulers
+├── utils/                 # Utility functions
+├── train.py              # Training script
+└── inference.py          # Inference & evaluation script
 ```
 
-**NOTE: you need to set use_cfg to TRUE**
-
-# 6. Evaluation
-
-```
-inference.py
-```
+## Features
+- Basic DDPM implementation
+- DDIM sampling support
+- Latent space diffusion with VAE
+- Classifier-Free Guidance
+- FID and IS evaluation metrics
